@@ -7,7 +7,7 @@ all: simulation
 simulation: simulation.c simulation_data_structures.h simulation_parameters.h
 	$(CC) $(CFLAGS) $(OPT) simulation.c -o simulation
 
-run: simulation_simulation
+run_simulation: simulation
 	@./simulation
 
 clean:

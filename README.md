@@ -3,5 +3,5 @@
 ## Usage
 Configure parameters in [simulation_parameters.h](./simulation_parameters.h), then run the following command to execute the simulation:
 ```
-make run
+make run_simulation
 ```

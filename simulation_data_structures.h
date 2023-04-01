@@ -2,9 +2,10 @@
 
 #ifndef SIMULATION_DATA_STRUCTURES_H
 
-enum stream_type { PRODUCER, CONSUMER };       // What the role of the computer is in streaming
-enum codec_type { h264, h265 };                // Which codec is being used
-enum processing_method { HARDWARE, SOFTWARE }; // Is the codec processed on software or hardware
+enum stream_type { PRODUCER, CONSUMER };          // What the role of the computer is in streaming
+enum codec_type { h264, h265 };                   // Which codec is being used
+enum processing_method { HARDWARE, SOFTWARE };    // Is the codec processed on software or hardware
+enum video_quality { HALF_HD, HD, FULL_HD, UHD }; // Quality of video being streamed
 
 // A computer being used to produce or consume streamed video
 // It is connected to a network
@@ -23,6 +24,18 @@ typedef struct network_connection {
     uint16_t num_connected_elements;
     struct computer *connected_elements;
 } network_connection;
+
+// Represents which consumers are watching which content
+typedef struct stream {
+    struct computer *producer;
+    struct computer *consumers;
+} stream;
+
+// A video format
+typedef struct video {
+    enum video_quality quality;
+    uint64_t size;
+} video;
 
 #define SIMULATION_DATA_STRUCTURES_H
 #endif
