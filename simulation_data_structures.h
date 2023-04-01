@@ -18,7 +18,7 @@ typedef struct computer {
 
 // A network connection element that simulates the netowrk being streamed on
 typedef struct network_connection {
-    uint64_t bandwitdh;
+    uint64_t bandwidth;
     uint64_t usage;
     uint16_t num_connected_elements;
     struct computer *connected_elements;

@@ -12,7 +12,10 @@ int main(int argc, char *argv[])
     printf("Beginning Simulation\n");
 
 
+    // Create network
     network = (network_connection *) malloc(sizeof( network_connection ));
+    network->bandwidth = NETWORK_BANDWITDH;
+    network->usage = 0;
 
 
     // Create producers
