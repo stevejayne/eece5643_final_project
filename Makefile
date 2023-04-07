@@ -10,7 +10,10 @@ simulation: simulation.c simulation_data_structures.h simulation_parameters.h
 run_simulation: simulation
 	@./simulation
 
+run: simulation
+	@./simulation
+
 clean:
 	@rm -rf simulation
 
-.PHONY: clean run_simulation
+.PHONY: clean run_simulation run
