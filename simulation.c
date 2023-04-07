@@ -5,9 +5,10 @@
 
 int main(int argc, char *argv[])
 {
-    int i;
+    int i, j;
     computer *producers, *consumers;
     network_connection *network;
+    stream *video_streams;
     
     printf("Beginning Simulation\n");
 
@@ -32,6 +33,15 @@ int main(int argc, char *argv[])
         consumers[i].type = CONSUMER;
         consumers[i].codec = CODEC_TYPE;
         consumers[i].connection = network;
+    }
+
+    // Create the actual streams
+    video_streams = (stream *) malloc(sizeof( stream ) * NUM_PRODUCERS * NUM_CONSUMERS);
+    for (i = 0; i < NUM_PRODUCERS; i++){
+        for (j = 0; j < NUM_CONSUMERS; j++) {
+            video_streams[i * NUM_CONSUMERS + j].producer = &producers[i];
+            video_streams[i * NUM_CONSUMERS + j].consumers = &consumers[j];
+        }
     }
 
     printf("Ending Simulation\n");

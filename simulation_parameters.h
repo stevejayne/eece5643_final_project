@@ -8,4 +8,9 @@
 
 
 // Network Parameterss
-#define NETWORK_BANDWITDH 100000 // Options: 1000-1000000
+#define NETWORK_BANDWITDH 100000 // Options: 1000-1000000 in Mb
+#define NETWORK_SPEED 1000 // Options: 1-10000 in Mbps
+
+
+// Codec Processing parameters
+

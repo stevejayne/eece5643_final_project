@@ -2,10 +2,10 @@
 
 #ifndef SIMULATION_DATA_STRUCTURES_H
 
-enum stream_type { PRODUCER, CONSUMER };          // What the role of the computer is in streaming
-enum codec_type { h264, h265 };                   // Which codec is being used
-enum processing_method { HARDWARE, SOFTWARE };    // Is the codec processed on software or hardware
-enum video_quality { HALF_HD, HD, FULL_HD, UHD }; // Quality of video being streamed
+enum stream_type { PRODUCER, CONSUMER };           // What the role of the computer is in streaming
+enum codec_type { h264, h265 };                    // Which codec is being used
+enum processing_method { HARDWARE, SOFTWARE };     // Is the codec processed on software or hardware
+enum video_quality { HALF_HD, HD, FULL_HD, UHD };  // Quality of video being streamed
 
 // A computer being used to produce or consume streamed video
 // It is connected to a network
