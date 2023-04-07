@@ -49,4 +49,5 @@ int main(int argc, char *argv[])
     free(producers);
     free(consumers);
     free(network);
+    free(video_streams);
 }
