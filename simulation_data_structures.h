@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdbool.h>
 
 #ifndef SIMULATION_DATA_STRUCTURES_H
 
@@ -14,6 +15,7 @@ typedef struct computer {
    enum codec_type codec;
    enum processing_method method;
    struct network_connection *connection;
+   bool checked;
 } computer;
 
 
@@ -30,6 +32,7 @@ typedef struct stream {
     struct computer *producer;
     struct computer *consumers;
     enum video_quality quality;
+    bool active;
 } stream;
 
 // A video format
@@ -45,8 +48,6 @@ typedef struct metrics {
     uint64_t max_network_usage;
     uint64_t total_processing_power;
     uint64_t total_network_usage;
-    uint64_t avg_processing_power;
-    uint64_t avg_network_usage;
 } metrics;
 
 #define SIMULATION_DATA_STRUCTURES_H

@@ -3,15 +3,34 @@
 #include "simulation_parameters.h"
 #include "simulation_data_structures.h"
 
-int get_packet_size(stream *video_stream, int producer_num)
+void display_metrics(metrics *simulation_metrics, uint64_t simulation_time)
+{
+    // Print simulation runtime
+    printf("Ran the simulation for %llu seconds\n", simulation_time);
+
+    // Print system config
+
+    // Print network usage metrics
+    printf("Total network usage: %llu\n", simulation_metrics->total_network_usage);
+    printf("Max network usage: %llu\n", simulation_metrics->max_network_usage);
+    printf("Average network usage: %f\n", 1.0 * simulation_metrics->total_network_usage / simulation_time * 1.0);
+
+    // Print power usage metrics
+    printf("Total processing power used: %llu\n", simulation_metrics->total_processing_power);
+    printf("Max processing power used: %llu\n", simulation_metrics->max_processing_power);
+    printf("Average processing power used: %f\n", 1.0 * simulation_metrics->total_processing_power / simulation_time * 1.0);
+
+}
+
+int get_packet_size(stream *video_stream)
 {
     // Start with initial packet size
     int packet_size = 1;
 
     // Account for codec used
-    if (video_stream->producer[producer_num].codec == h264) {
+    if (video_stream->producer->codec == h264) {
         packet_size = packet_size * 10;
-    } else if (video_stream->producer[producer_num].codec == h265) {
+    } else if (video_stream->producer->codec == h265) {
          packet_size = packet_size * 2;
     } else {
         printf("Error decoding the codec type in get_packet_size\n");
@@ -33,30 +52,60 @@ int get_packet_size(stream *video_stream, int producer_num)
     return packet_size;
 }
 
-int get_processing_power_used(stream *video_stream, int producer_num)
+int get_processing_power_used_prod(stream *video_stream)
 {
     // Start with initial processing used
     int processing_used = 1;
 
     // Account for codec used and method of decoding
-    if (video_stream->producer[producer_num].codec == h264) {
-        if (video_stream->producer[producer_num].method == HARDWARE) {
+    if (video_stream->producer->codec == h264) {
+        if (video_stream->producer->method == HARDWARE) {
             processing_used = processing_used * 1;
-        } else if (video_stream->producer[producer_num].method == SOFTWARE) {
+        } else if (video_stream->producer->method == SOFTWARE) {
             processing_used = processing_used * 5;
         } else {
-            printf("Error decoding the encoding method in get_processing_power_used\n");
+            printf("Error decoding the encoding method in get_processing_power_used_prod\n");
         }
-    } else if (video_stream->producer[producer_num].codec == h265) {
-        if (video_stream->producer[producer_num].method == HARDWARE) {
+    } else if (video_stream->producer->codec == h265) {
+        if (video_stream->producer->method == HARDWARE) {
             processing_used = processing_used * 2;
-        } else if (video_stream->producer[producer_num].method == SOFTWARE) {
+        } else if (video_stream->producer->method == SOFTWARE) {
             processing_used = processing_used * 10;
         } else {
-            printf("Error decoding the encoding method in get_processing_power_used\n");
+            printf("Error decoding the encoding method in get_processing_power_used_prod\n");
         }
     } else {
-        printf("Error decoding the codec type in get_processing_power_used\n");
+        printf("Error decoding the codec type in get_processing_power_used_prod\n");
+    }
+
+    return processing_used;
+}
+
+int get_processing_power_used_cons(stream *video_stream)
+{
+    // Start with initial processing used
+    int processing_used = 1;
+
+    // Account for codec used and method of decoding
+    if (video_stream->consumers->codec == h264) {
+        if (video_stream->consumers->method == HARDWARE) {
+            processing_used = processing_used * 1;
+        } else if (video_stream->consumers->method == SOFTWARE) {
+            processing_used = processing_used * 5;
+        } else {
+            printf("Error decoding the encoding method in get_processing_power_used_cons\n");
+        }
+    } else if (video_stream->consumers->codec == h265) {
+        if (video_stream->consumers->method == HARDWARE) {
+            processing_used = processing_used * 2;
+        } else if (video_stream->consumers->method == SOFTWARE) {
+            processing_used = processing_used * 10;
+        } else {
+            printf("In here");
+            printf("Error decoding the encoding method in get_processing_power_used_cons\n");
+        }
+    } else {
+        printf("Error decoding the codec type in get_processing_power_used_cons\n");
     }
 
     return processing_used;
@@ -68,20 +117,20 @@ void update_metrics(metrics *simulation_metrics, network_connection *network, ui
     if (processing_in_iteration > simulation_metrics->max_processing_power) {
         simulation_metrics->max_processing_power = processing_in_iteration;
     }
-    simulation_metrics->total_processing_power = processing_in_iteration;
+    simulation_metrics->total_processing_power += processing_in_iteration;
 
     // Update network utilization used in that iteration
     if (network->usage > simulation_metrics->max_network_usage) {
         simulation_metrics->max_network_usage = network->usage;
     }
-    simulation_metrics->total_network_usage = network->usage;
+    simulation_metrics->total_network_usage += network->usage;
 }
 
 int main(int argc, char *argv[])
 {
     int i, j;
     uint64_t simulation_time = 0;
-    int32_t temp_packet_size, temp_processing_power, total_packet_size;
+    int32_t temp_packet_size, temp_processing_power, aggregate_processing_power;
 
     computer *producers, *consumers;
     network_connection *network;
@@ -91,6 +140,8 @@ int main(int argc, char *argv[])
     metrics simulation_performance_metrics;
     simulation_performance_metrics.max_processing_power = 0;
     simulation_performance_metrics.max_network_usage = 0;
+    simulation_performance_metrics.total_processing_power = 0;
+    simulation_performance_metrics.total_network_usage = 0;
 
 
     // Create network
@@ -104,6 +155,7 @@ int main(int argc, char *argv[])
     for (i = 0; i < NUM_PRODUCERS; i++) {
         producers[i].type = PRODUCER;
         producers[i].codec = CODEC_TYPE;
+        producers[i].method = PRODUCER_METHOD;
         producers[i].connection = network;
     }
 
@@ -112,6 +164,7 @@ int main(int argc, char *argv[])
     for (i = 0; i < NUM_CONSUMERS; i++) {
         consumers[i].type = CONSUMER;
         consumers[i].codec = CODEC_TYPE;
+        consumers[i].method = CONSUMER_METHOD;
         consumers[i].connection = network;
     }
 
@@ -121,27 +174,51 @@ int main(int argc, char *argv[])
         for (j = 0; j < NUM_CONSUMERS; j++) {
             video_streams[i * NUM_CONSUMERS + j].producer = &producers[i];
             video_streams[i * NUM_CONSUMERS + j].consumers = &consumers[j];
-            video_streams[i * NUM_CONSUMERS + j].quality = HALF_HD;
+            video_streams[i * NUM_CONSUMERS + j].quality = STREAM_QUALITY;
+            video_streams[i * NUM_CONSUMERS + j].active = true;
         }
     }
 
     // This loop represents the actual simulation
     printf("Beginning Simulation\n");
     
-    while (!RUN_UNTIL_END && simulation_time < SIMULATION_CUTOFF_TIME) {
+    while (simulation_time < SIMULATION_CUTOFF_TIME) {
         // Evaluate each stream
-        for (i = 0; i < NUMBER_OF_STREAMS; i++) {
-            temp_packet_size = get_packet_size(&video_streams[i], i);
-            get_processing_power_used(&video_streams[i], i);
+        network->usage = 0;
+        aggregate_processing_power = 0;
 
-            update_metrics(&simulation_performance_metrics, network, temp_packet_size);
+        // Reset producer power flag
+        for (i = 0; i < NUM_PRODUCERS; i++) {
+            producers[i].checked = false;
         }
+
+        // Get network and power usage
+        for (i = 0; i < NUMBER_OF_STREAMS; i++) {
+            temp_processing_power = 0;
+
+            if (!video_streams[i].producer->checked) {
+                temp_processing_power += get_processing_power_used_prod(&video_streams[i]);
+                video_streams[i].producer->checked = true;
+            }
+
+            temp_processing_power += get_processing_power_used_cons(&video_streams[i]);
+
+            temp_packet_size = get_packet_size(&video_streams[i]);
+
+            aggregate_processing_power += temp_processing_power;
+            network->usage += temp_packet_size;
+        }
+
+        // Update the metrics for this iteration
+        update_metrics(&simulation_performance_metrics, network, aggregate_processing_power);
 
         simulation_time++;
     }
 
+
     printf("Ending Simulation\n");
-    printf("Ran the simulation for %llu seconds\n", simulation_time);
+    
+    display_metrics(&simulation_performance_metrics, simulation_time);
 
     free(producers);
     free(consumers);
