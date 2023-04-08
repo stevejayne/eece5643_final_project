@@ -6,14 +6,14 @@
 void display_metrics(metrics *simulation_metrics, uint64_t simulation_time)
 {
     // Print simulation runtime
-    printf("Ran the simulation for %llu seconds\n", simulation_time);
+    printf("Ran the simulation for %llu seconds\n\n", simulation_time);
 
     // Print system config
 
     // Print network usage metrics
     printf("Total network usage: %llu\n", simulation_metrics->total_network_usage);
     printf("Max network usage: %llu\n", simulation_metrics->max_network_usage);
-    printf("Average network usage: %f\n", 1.0 * simulation_metrics->total_network_usage / simulation_time * 1.0);
+    printf("Average network usage: %f\n\n", 1.0 * simulation_metrics->total_network_usage / simulation_time * 1.0);
 
     // Print power usage metrics
     printf("Total processing power used: %llu\n", simulation_metrics->total_processing_power);

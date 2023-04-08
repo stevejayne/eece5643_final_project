@@ -7,14 +7,14 @@
 #define NUMBER_OF_STREAMS (NUM_PRODUCERS * NUM_CONSUMERS)
 
 #define CODEC_TYPE h265    // Options: h264 or h265
-#define STREAM_QUALITY FULL_HD  // Options: HALF_HD, HD, FULL_HD, UHD
+#define STREAM_QUALITY UHD  // Options: HALF_HD, HD, FULL_HD, UHD
 
-#define PRODUCER_METHOD HARDWARE
-#define CONSUMER_METHOD SOFTWARE
+#define PRODUCER_METHOD HARDWARE // Options: HARDWARE, SOFTWARE
+#define CONSUMER_METHOD SOFTWARE // Options: HARDWARE, SOFTWARE
 
 // Network Parameterss
 #define NETWORK_BANDWITDH 1000 // Options: 1000-1000000 in Mb
-#define NETWORK_SPEED 1000       // Options: 1-10000 in Mbps
+#define NETWORK_SPEED 1000     // Options: 1-10000 in Mbps
 
 
 // Codec Processing parameters
