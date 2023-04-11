@@ -22,7 +22,7 @@ typedef struct computer {
 // A network connection element that simulates the netowrk being streamed on
 typedef struct network_connection {
     uint64_t bandwidth;
-    uint64_t usage;
+    double usage;
     uint16_t num_connected_elements;
     struct computer *connected_elements;
 } network_connection;
@@ -44,10 +44,10 @@ typedef struct video {
 
 // Performance metrics data structure
 typedef struct metrics {
-    uint64_t max_processing_power;
-    uint64_t max_network_usage;
-    uint64_t total_processing_power;
-    uint64_t total_network_usage;
+    double max_processing_power;
+    double max_network_usage;
+    double total_processing_power;
+    double total_network_usage;
 } metrics;
 
 #define SIMULATION_DATA_STRUCTURES_H
