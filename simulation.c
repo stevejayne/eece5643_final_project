@@ -130,6 +130,7 @@ int main(int argc, char *argv[])
     int i, j;
     uint64_t simulation_time = 0;
     double temp_packet_size, temp_processing_power, aggregate_processing_power;
+    bool exitFlag = false;
 
     computer *producers, *consumers;
     network_connection *network;
@@ -206,7 +207,17 @@ int main(int argc, char *argv[])
 
             aggregate_processing_power += temp_processing_power;
             network->usage += temp_packet_size;
+
+            // Exit sim if bandwidth exceeds
+            if (network->usage > network->bandwidth) {
+                exitFlag = true;
+                break;
+            }
         }
+
+        // Exit sim if bandwidth exceeds
+        if (exitFlag)
+            break;
 
         // Update the metrics for this iteration
         update_metrics(&simulation_performance_metrics, network, aggregate_processing_power);
@@ -214,6 +225,8 @@ int main(int argc, char *argv[])
         simulation_time++;
     }
 
+    if (exitFlag)
+        printf("Network usage exceeds bandwidth\n");
 
     printf("Ending Simulation\n");
     
