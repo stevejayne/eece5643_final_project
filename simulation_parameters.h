@@ -19,8 +19,8 @@
 
 // Codec Processing parameters
 // MODIFY THESE TO FIT VALUES TO MATCH DATA FROM PAPERS
-#define PACKET_SIZE_RATIO 10.0 // Options(double): the ratio of the final output size of h.264 vs h.265
-                               // in example, h.264 is 10x the size of h.265
+#define PACKET_SIZE_RATIO 1.754 // Options(double): the ratio of the final output size of h.264 vs h.265
+                                // in example, h.264 is 10x the size of h.265
 
 
 // Ratios of the performance of Codecs on given devices
