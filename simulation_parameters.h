@@ -2,7 +2,7 @@
 
 // Streaming parameters
 #define NUM_PRODUCERS 1 // Options: 1-30
-#define NUM_CONSUMERS 5 // Options: 1-30
+#define NUM_CONSUMERS 125 // Options: 1-30
 
 #define NUMBER_OF_STREAMS (NUM_PRODUCERS * NUM_CONSUMERS)
 

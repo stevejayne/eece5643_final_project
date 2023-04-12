@@ -22,6 +22,24 @@ void display_metrics(metrics *simulation_metrics, uint64_t simulation_time)
 
 }
 
+double account_for_quality(double givenValue, enum video_quality quality)
+{
+
+    // Account for the quality of the video
+    if (quality == HALF_HD) {
+        return givenValue;
+    } else if (quality == HD) {
+        return givenValue * 2;
+    } else if (quality == FULL_HD) {
+        return givenValue * 4;
+    } else if (quality == UHD) {
+        return givenValue * 8;
+    } else {
+        printf("Error decoding the video quality in get_packet_size\n");
+        return -1;
+    }
+}
+
 double get_packet_size(stream *video_stream)
 {
     // Start with initial packet size
@@ -37,17 +55,7 @@ double get_packet_size(stream *video_stream)
     }
 
     // Account for the quality of the video
-    if (video_stream->quality == HALF_HD) {
-        packet_size = packet_size * 1;
-    } else if (video_stream->quality == HD) {
-        packet_size = packet_size * 2;
-    } else if (video_stream->quality == FULL_HD) {
-        packet_size = packet_size * 4;
-    } else if (video_stream->quality == UHD) {
-        packet_size = packet_size * 8;
-    } else {
-        printf("Error decoding the video quality in get_packet_size\n");
-    }
+    packet_size = account_for_quality(packet_size, video_stream->quality);
 
     return packet_size;
 }
@@ -78,6 +86,9 @@ double get_processing_used_prod(stream *video_stream)
         printf("Error decoding the codec type in get_processing_used_prod\n");
     }
 
+    // Account for the quality of the video
+    processing_used = account_for_quality(processing_used, video_stream->quality);
+
     return processing_used;
 }
 
@@ -106,6 +117,9 @@ double get_processing_power_cons(stream *video_stream)
     } else {
         printf("Error decoding the codec type in get_processing_power_cons\n");
     }
+
+    // Account for the quality of the video
+    processing_used = account_for_quality(processing_used, video_stream->quality);
 
     return processing_used;
 }
