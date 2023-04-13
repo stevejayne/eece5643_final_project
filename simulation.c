@@ -13,7 +13,9 @@ void display_metrics(metrics *simulation_metrics, uint64_t simulation_time)
     // Print network usage metrics
     printf("Total network usage: %lf\n", simulation_metrics->total_network_usage);
     printf("Max network usage: %lf\n", simulation_metrics->max_network_usage);
-    printf("Average network usage: %f\n\n", simulation_metrics->total_network_usage / simulation_time);
+    printf("Average network usage: %f\n", simulation_metrics->total_network_usage / simulation_time);
+    printf("Average network usage(%%): %f\n\n", simulation_metrics->total_network_usage / simulation_time / NETWORK_BANDWITDH);
+
 
     // Print power usage metrics
     printf("Total processing power used: %lf\n", simulation_metrics->total_processing_power);
